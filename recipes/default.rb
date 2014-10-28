@@ -84,6 +84,14 @@ when 'ldap'
     Chef::Log.fatal("Set node['nagios']['server_auth_method'] attribute in your role: #{node['nagios']['server_role']}")
     fail
   end
+when 'crowd'
+  if node['nagios']['server']['web_server'] == 'apache'
+    Chef::Log.warn('Crowd Authentication module not automatically installed by nagios cookbook.')
+  else
+    Chef::Log.fatal('Crowd authentication for Nagios is not supported on NGINX')
+    Chef::Log.fatal("Set node['nagios']['server_auth_method'] attribute in your role: #{node['nagios']['server_role']}")
+    fail
+  end
 else
   # setup htpasswd auth
   directory node['nagios']['conf_dir']
@@ -146,18 +154,18 @@ end
 hostgroups << node['os'] unless hostgroups.include?(node['os']) || node['os'].nil?
 
 nagios_bags         = NagiosDataBags.new
-services            = nagios_bags.get(node['nagios']['services_databag'])
-servicegroups       = nagios_bags.get(node['nagios']['servicegroups_databag'])
-templates           = nagios_bags.get(node['nagios']['templates_databag'])
-hosttemplates           = nagios_bags.get(node['nagios']['hosttemplates_databag'])
-eventhandlers       = nagios_bags.get(node['nagios']['eventhandlers_databag'])
-unmanaged_hosts     = nagios_bags.get(node['nagios']['unmanagedhosts_databag'])
-serviceescalations  = nagios_bags.get(node['nagios']['serviceescalations_databag'])
-hostescalations     = nagios_bags.get(node['nagios']['hostescalations_databag'])
-contacts            = nagios_bags.get(node['nagios']['contacts_databag'])
-contactgroups       = nagios_bags.get(node['nagios']['contactgroups_databag'])
-servicedependencies = nagios_bags.get(node['nagios']['servicedependencies_databag'])
-timeperiods         = nagios_bags.get(node['nagios']['timeperiods_databag'])
+services            = nagios_bags.get(node['nagios']['services_databag']) + node['nagios']['services']
+servicegroups       = nagios_bags.get(node['nagios']['servicegroups_databag']) + node['nagios']['servicegroups']
+templates           = nagios_bags.get(node['nagios']['templates_databag']) + node['nagios']['templates']
+hosttemplates       = nagios_bags.get(node['nagios']['hosttemplates_databag']) + node['nagios']['hosttemplates']
+eventhandlers       = nagios_bags.get(node['nagios']['eventhandlers_databag']) + node['nagios']['eventhandlers']
+unmanaged_hosts     = nagios_bags.get(node['nagios']['unmanagedhosts_databag']) + node['nagios']['unmanagedhosts']
+serviceescalations  = nagios_bags.get(node['nagios']['serviceescalations_databag']) + node['nagios']['serviceescalations']
+hostescalations     = nagios_bags.get(node['nagios']['hostescalations_databag']) + node['nagios']['hostescalations']
+contacts            = nagios_bags.get(node['nagios']['contacts_databag']) + node['nagios']['contacts']
+contactgroups       = nagios_bags.get(node['nagios']['contactgroups_databag']) + node['nagios']['contactgroups']
+servicedependencies = nagios_bags.get(node['nagios']['servicedependencies_databag']) + node['nagios']['servicedependencies']
+timeperiods         = nagios_bags.get(node['nagios']['timeperiods_databag']) + node['nagios']['timeperiods']
 
 # Add unmanaged host hostgroups to the hostgroups array if they don't already exist
 unmanaged_hosts.each do |host|

@@ -60,6 +60,18 @@
     AuthzLDAPAuthoritative <%= node['nagios']['ldap_authoritative'] %>
     require valid-user
   </Location>
+<% when "crowd" -%>
+   <Location />
+    AuthName "Nagios Server"
+    AuthType Basic
+    AuthBasicProvider crowd
+    CrowdAppName <%= node['nagios']['crowd_appname'] %>
+    CrowdAppPassword <%= node['nagios']['crowd_apppassword'] %>
+    <% unless node['nagios']['crowd_certpath'].nil? -%>CrowdCertPath <%= node['nagios']['crowd_certpath'] %><% end %>
+    <% unless node['nagios']['crowd_verifypeer'] == false -%>CrowdSSLVerifyPeer Off<% end %>
+    CrowdURL <%= node['nagios']['crowd_server'] %>
+    require valid-user
+  </Location> 
 <% else -%>
   <Location />
     AuthName "Nagios Server"

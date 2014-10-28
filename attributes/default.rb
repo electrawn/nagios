@@ -142,6 +142,19 @@ default['nagios']['sysadmin_sms_email']          = 'root@localhost'
 default['nagios']['server_auth_method']          = 'htauth'
 default['nagios']['users_databag']               = 'users'
 default['nagios']['users_databag_group']         = 'sysadmin'
+default['nagios']['services']            = []
+default['nagios']['servicegroups']       = []
+default['nagios']['templates']           = []
+default['nagios']['hosttemplates']       = []
+default['nagios']['eventhandlers']       = []
+default['nagios']['unmanagedhosts']      = []
+default['nagios']['serviceescalations']  = []
+default['nagios']['hostescalations']     = []
+default['nagios']['contacts']            = []
+default['nagios']['contactgroups']       = []
+default['nagios']['servicedependencies'] = []
+default['nagios']['timeperiods'] = []
+default['nagios']['timeperiods_databag']         = 'nagios_timeperiods'
 default['nagios']['services_databag']            = 'nagios_services'
 default['nagios']['servicegroups_databag']       = 'nagios_servicegroups'
 default['nagios']['templates_databag']           = 'nagios_templates'
@@ -171,7 +184,14 @@ default['nagios']['ldap_bind_password'] = nil
 default['nagios']['ldap_url']           = nil
 default['nagios']['ldap_authoritative'] = nil
 
-default['nagios']['templates']       = Mash.new
+# for crowd integration
+default['nagios']['crowd_appname'] = "nagios"
+default['nagios']['crowd_apppassword'] = "password"
+default['nagios']['crowd_server'] = "https://example.com/crowd"
+default['nagios']['crowd_certpath'] = nil
+default['nagios']['crowd_verifypeer'] = true
+
+#default['nagios']['templates']       = Mash.new
 
 # This setting is effectively sets the minimum interval (in seconds) nagios can handle.
 # Other interval settings provided in seconds will calculate their actual from this value, since nagios works in 'time units' rather than allowing definitions everywhere in seconds
