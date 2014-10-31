@@ -11,7 +11,7 @@ define host {
 }
 
 <% @nodes.each do |n| -%>
-<% unless n.name == node.name -%>
+<% unless n.name == node.name || n.chef_environment.nil? -%>
 define host {
   use server
   <% # because nodes may not include the nagios cookbook, host_template
